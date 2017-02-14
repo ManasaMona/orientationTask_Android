@@ -2,12 +2,9 @@ package com.example.manasaa.orientationtask;
 
 import android.app.FragmentManager;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.VectorEnabledTintResources;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -38,15 +35,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mTextView = (TextView) findViewById(R.id.textView);
         mStopButton.setVisibility(View.INVISIBLE);
 
+        mStartButton.setOnClickListener(this);
+        mStopButton.setOnClickListener(this);
+        mActivity2.setOnClickListener(this);
+
         if (savedInstanceState != null) {
             int progress = savedInstanceState.getInt("progress_value");
             mTextView.setText(progress + "%");
             mProgressBar.setProgress(progress);
         }
-
-        mStartButton.setOnClickListener(this);
-        mStopButton.setOnClickListener(this);
-        mActivity2.setOnClickListener(this);
 
         FragmentManager fragmentManager=getFragmentManager();
         mFragment=(ProgressBarFragment)fragmentManager.findFragmentByTag(ProgressBarFragment.TAG_PROGRESSBAR_FRAGMENT);
@@ -80,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
-
+    //destroy on backpress
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         Log.d(TAG,"*****BACKBUTTON PRESSED*****");
@@ -88,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return super.onKeyDown(keyCode, event);
     }
 
+    //Interface Methods
     @Override
     public void onPreExecute() {
 
@@ -125,4 +123,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //    }
 }
 
-//Static class
+

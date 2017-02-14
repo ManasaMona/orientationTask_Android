@@ -1,19 +1,16 @@
 package com.example.manasaa.orientationtask;
 
 import android.app.Activity;
+
 import android.content.Context;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.app.Fragment;
+
 
 public class ProgressBarFragment extends android.app.Fragment {
     public static final String TAG_PROGRESSBAR_FRAGMENT = "progressbar_fragment";
 
+    //Interface to interact with Activity
     public static interface TaskStatusCallback{
         void onPreExecute();
         void onProgressUpdate(int Progress);
@@ -22,24 +19,28 @@ public class ProgressBarFragment extends android.app.Fragment {
 
     }
 
-    TaskStatusCallback mStatusCallBack;
-    BackgroundTask mBackgroundTask;
-    boolean isTaskExecuting=false;
+    TaskStatusCallback mStatusCallBack;//Interface object
+    BackgroundTask mBackgroundTask;//AsyncTask object
+    boolean isTaskExecuting=false;//background process running or not
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mStatusCallBack=(TaskStatusCallback)activity;
+    public void onAttach(Context context) {//Attaching the activity to fragment
+        super.onAttach(context);
+        Activity a;
+        if (context instanceof Activity){
+            a=(Activity) context;
+            mStatusCallBack=(TaskStatusCallback)a;//instantiating interface to activity
+        }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
+        setRetainInstance(true);//save fragment instance across the activity
     }
 
     @Override
-    public void onDetach() {
+    public void onDetach() {//
         super.onDetach();
         mStatusCallBack=null;
     }
@@ -89,20 +90,21 @@ public class ProgressBarFragment extends android.app.Fragment {
         }
     }
 
-    public void startBackgroundTask() {
-        if (!isTaskExecuting){
+    public void startBackgroundTask() {//starting it in background
+        if (!isTaskExecuting){//Not started
             mBackgroundTask =new BackgroundTask();
             mBackgroundTask.execute();
             isTaskExecuting=true;
         }
     }
 
-    public void cancelBackgroundTask(){
-        if (isTaskExecuting){
+    public void cancelBackgroundTask(){//Stoping
+        if (isTaskExecuting){//if started
             mBackgroundTask.cancel(true);
             isTaskExecuting=false;
         }
     }
+
     public void updateExecutingStatus(boolean isExecuting){
         this.isTaskExecuting=isExecuting;
     }
